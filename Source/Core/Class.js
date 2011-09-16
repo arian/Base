@@ -5,7 +5,7 @@ description: Contains the Class Function for easily creating, extending, and imp
 ...
 */
 
-define(['../Utility/typeOf', '../Host/Object', '../Data/Accessor', '../Utility/merge'], function(typeOf, Object, Accessor){
+define(['../Utility/typeOf', '../Host/Object', './Accessor', '../Utility/merge'], function(typeOf, Object, Accessor){
 
 var Class = function(params){
 
