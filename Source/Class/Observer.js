@@ -31,10 +31,11 @@ return new Class({
 
 	dispatchEvent: function(name, event, bind){
 		if (!(event instanceof Event)){
-			event = new Event({data: event});
+			event = new Event({data: {args: event}});
 		}
 		if (!bind) bind = this;
 		var target = this;
+		event.set('target', target);
 		while (target){
 			var listeners = listenersOfType(target, name);
 			for (var i = 0; i < listeners.length; i++){

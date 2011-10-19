@@ -1,38 +1,27 @@
 
-define(['../Class', '../Utility/merge'], function(Class, merge){
+define(['../Class', '../Utility/typeOf', '../Utility/merge', '../Utility/Function'], function(Class, typeOf, merge, Function){
 
 return new Class({
 
 	initialize: function(options){
 		// TODO: once Options works again, use that.
 		options = this.options = merge({
-			stopped: false,
-			target: null,
-			data: null
+			stopped: false
 		}, options || {});
 
 		this.stopped = options.stopped;
-		this.target = options.target;
-		this.data = options.data;
+		this.data = {};
+		if (options.data && typeOf(options.data) == 'object') this.set(options.data);
 	},
 
-	setTarget: function(target){
-		this.target = target;
+	set: Function.overloadSetter(function(key, value){
+		this.data[key] = value;
 		return this;
-	},
+	}),
 
-	getTarget: function(){
-		return this.target;
-	},
-
-	setData: function(data){
-		this.data = data;
-		return this;
-	},
-
-	getData: function(){
-		return this.data;
-	},
+	get: Function.overloadGetter(function(key){
+		return this.data[key];
+	}),
 
 	isStopped: function(){
 		return this.stopped;
