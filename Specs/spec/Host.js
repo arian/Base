@@ -87,11 +87,11 @@ describe('Host.implement', function(){
 		var Host_ = Host(FakeHost);
 		var newInstanceMethod = function(){ return [this, arguments]; };
 		Host_.implement('newInstanceMethod', newInstanceMethod);
-		var results = Host.newInstanceMethod('a', 'b', 'c');
+		var results = Host_.newInstanceMethod('a', 'b', 'c');
 		expect(results[0]).toEqual('a');
 		expect(results[1]).toEqual(['b', 'c']);
 
-		var results = Host_.prototype.newInstanceMethod.apply('a', ['b', 'c']);
+		results = Host_.prototype.newInstanceMethod.apply('a', ['b', 'c']);
 		expect(results[0]).toEqual('a');
 		expect(results[1]).toEqual(['b', 'c']);
 	});
@@ -113,11 +113,11 @@ describe('Host.implement', function(){
 			instanceMethod: instanceMethod,
 			newInstanceMethod: instanceMethod
 		})
-		expect(Host_.instanceMethod).toBe(FakeHost.prototype.instanceMethod);
+		// expect(Host_.instanceMethod).toBe(FakeHost.prototype.instanceMethod); generic version is wrapped in another function when implemented via .implement()
 		expect(Host_.prototype.newInstanceMethod).toBeDefined();
 		expect(Host_.prototype.newInstanceMethod).toBe(instanceMethod);
 		expect(Host_.newInstanceMethod).toBeDefined();
-		expect(Host_.newInstanceMethod).toBe(instanceMethod);
+		// expect(Host_.newInstanceMethod).toBe(instanceMethod); generic version is wrapped in another function when implemented via .implement()
 
 		expect(FakeHost.prototype.newInstanceMethod).toBeUndefined();
 		expect(FakeHost.newInstanceMethod).toBeUndefined();
@@ -129,7 +129,9 @@ describe('Host.install', function(){
 
 	beforeEach(reset);
 
-	it('should extend the host object with the static method', function(){
+	// Static methods are never added to the native, makes no sense to do: Array.forEach
+	// or HostArray.forEach.
+	xit('should extend the host object with the static method', function(){
 		var Host_ = Host(FakeHost);
 		var newStaticMethod = function(){};
 		Host_.extend('newStaticMethod', newStaticMethod);
@@ -149,18 +151,21 @@ describe('Host.install', function(){
 		Host_.implement('instanceMethod', newInstanceMethod);
 
 		var oldInstanceMethod = FakeHost.prototype.instanceMethod;
-		var oldGenericMethod = FakeHost.instanceMethod;
+		// see test above about installing generics
+		//var oldGenericMethod = FakeHost.instanceMethod;
 		Host_.install();
 
 		expect(FakeHost.prototype.newInstanceMethod).toBe(newInstanceMethod);
-		expect(FakeHost.newInstanceMethod).toBeDefined();
+		// expect(FakeHost.newInstanceMethod).toBeDefined();
 		expect(FakeHost.prototype.instanceMethod).toBe(oldInstanceMethod);
-		expect(FakeHost.instanceMethod).toBe(oldGenericMethod);
+		// expect(FakeHost.instanceMethod).toBe(oldGenericMethod);
 	});
 
 })
 
 describe('Host(Host)', function(){
+
+	beforeEach(reset);
 
 	it('should inherit methods from parent', function(){
 		var Parent = Host(FakeHost);
@@ -175,10 +180,12 @@ describe('Host(Host)', function(){
 		expect(Child.prototype.newInstanceMethod).toBeDefined();
 		expect(Child.prototype.newInstanceMethod).toBe(newInstanceMethod);
 
-		expect(Child.staticMethod).toBeDefined();
-		expect(Child.staticMethod).toBe(FakeHost.staticMethod);
-		expect(Child.prototype.instanceMethod).toBeDefined();
-		expect(Child.prototype.instanceMethod).toBe(FakeHost.prototype.instanceMethod);
+		// these are only on FakeHost, so not automatically on Parent or Child
+		// for example: Parent.staticMethod is undefined too
+		//expect(Child.staticMethod).toBeDefined();
+		//expect(Child.staticMethod).toBe(FakeHost.staticMethod);
+		//expect(Child.prototype.instanceMethod).toBeDefined();
+		//expect(Child.prototype.instanceMethod).toBe(FakeHost.prototype.instanceMethod);
 
 		jasmine.log('should also inherit any new methods');
 		var newerStaticMethod = function(){};
@@ -221,8 +228,11 @@ describe('Host(Host).install', function(){
 
 		Child.install();
 
-		expect(FakeHost.newStaticMethod).toBeDefined();
-		expect(FakeHost.newStaticMethod).toBe(newStaticMethod);
+		// it doesn't install generics, because you can always do Child.newStaticMethod
+		// which is preferable over FakeHost.newStaticMethod.
+		// it looks the same anyway: Array.each([1,2], fn) or ArrayHost.each([1,2], fn);
+		//expect(FakeHost.newStaticMethod).toBeDefined();
+		//expect(FakeHost.newStaticMethod).toBe(newStaticMethod);
 		expect(FakeHost.prototype.newInstanceMethod).toBeDefined();
 		expect(FakeHost.prototype.newInstanceMethod).toBe(newInstanceMethod);
 	});
