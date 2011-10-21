@@ -6,13 +6,9 @@
 <body>
 	<script>
 		var suite = location.pathname.match(/(\w+)\.html$/i)[1];
-		var path;
-		if (window.self != window.top){
-			// iframed path, so the relative files in the Sprinter
-			path = window.parent.location.pathname.match(/(.*\/)\w+\.html$/i)[1];
-		} else {
-			path = location.pathname.match(/(.*\/)\w+\.html$/i)[1] + 'Sprinter/';
-		}
+		var path = location.search.match(/[&\?]path=([\w\/-_]+)/i);
+		if (path) path = path[1];
+		else path = location.pathname.match(/(.*\/)\w+\.html$/i)[1] + 'Sprinter/';
 		var script = document.createElement('script');
 		script.src = path + 'BrowserRunner.js';
 		document.body.appendChild(script);
