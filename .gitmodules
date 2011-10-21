@@ -1,0 +1,3 @@
+[submodule "Specs/Sprinter"]
+	path = Specs/Sprinter
+	url = git@github.com:mootools/Sprinter.git

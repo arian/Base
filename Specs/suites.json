@@ -1,0 +1,31 @@
+{
+	"SpecRunner": {
+		"modules": [
+			"Test/Core",
+			"Test/Class",
+			"Test/Accessor",
+			"Test/SandBox",
+			"Test/Host/Array",
+			"Test/Host/Date",
+			"Test/Host/Function",
+			"Test/Host/Number",
+			"Test/Host/Object",
+			"Test/Host/RegExp",
+			"Test/Host/String",
+			"Test/Utility/Array",
+			"Test/Utility/Function",
+			"Test/Utility/Number",
+			"Test/Utility/Object",
+			"Test/Utility/RegExp",
+			"Test/Utility/String",
+			"Test/Utility/typeOf"
+		],
+		"requirejs": {
+			"paths": {
+				"Test": "spec",
+				"Base": "../Source"
+			}
+		},
+		"require": "requirejs"
+	}
+}

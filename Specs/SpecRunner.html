@@ -1,52 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-	<title>MooTools Spec Runner</title>
-
-	<link rel="stylesheet" type="text/css" href="jasmine/jasmine.css">
-	<script src="jasmine/jasmine.js"></script>
-	<script src="jasmine/jasmine-html.js"></script>
-
-	<script src="require.js"></script>
-
-	<script type="text/javascript">
-
-	require({
-		paths: {
-			'Test': 'spec',
-			'Base': '../Source'
-		},
-		ready: function(){
-			require([
-				'Test/Core',
-				'Test/Class',
-				'Test/Accessor',
-				'Test/SandBox',
-				'Test/Host/Array',
-				'Test/Host/Date',
-				'Test/Host/Function',
-				'Test/Host/Number',
-				'Test/Host/Object',
-				'Test/Host/RegExp',
-				'Test/Host/String',
-				'Test/Utility/Array',
-				'Test/Utility/Function',
-				'Test/Utility/Number',
-				'Test/Utility/Object',
-				'Test/Utility/RegExp',
-				'Test/Utility/String',
-				'Test/Utility/typeOf'
-			], function(){
-				jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-				jasmine.getEnv().execute();
-			});
-		}
-	});
-	</script>
-
+	<title>MooTools Base Spec Runner</title>
 </head>
-
 <body>
+	<script>
+		var suite = location.pathname.match(/(\w+)\.html$/i)[1];
+		var path;
+		if (window.self != window.top){
+			// iframed path, so the relative files in the Sprinter
+			path = window.parent.location.pathname.match(/(.*\/)\w+\.html$/i)[1];
+		} else {
+			path = location.pathname.match(/(.*\/)\w+\.html$/i)[1] + 'Sprinter/';
+		}
+		var script = document.createElement('script');
+		script.src = path + 'BrowserRunner.js';
+		document.body.appendChild(script);
+	</script>
 </body>
 </html>
