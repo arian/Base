@@ -7,7 +7,7 @@ provides: Events
 ...
 */
 
-define(['../Core/Class', '../Utility/Function', '../Data/Table'], function(Class, Function, Table){
+define(['../Class', '../Utility/Function', '../Utility/Array'], function(Class, Function, Array){
 
 "use strict";
 
@@ -18,13 +18,9 @@ return new Class({
 	listen: Function.overloadSetter(function(type, fn){
 		if (!this[uid]) this[uid] = {};
 
-		if (!this[uid][type]) this[uid][type] = new Table;
+		if (!this[uid][type]) this[uid][type] = [];
 		var events = this[uid][type];
-		if (events.get(fn)) return this;
-
-		var bound = Function.bind(fn, this);
-
-		events.set(fn, bound);
+		if (Array.indexOf(events, fn) == -1) events.push(fn);
 
 		return this;
 	}),
@@ -36,13 +32,12 @@ return new Class({
 		if (!events) return this;
 
 		if (type == null){ //ignore all
-			for (var ty in this[uid]) this.ignore(ty);
+			this[uid] = {};
 		} else if (fn == null){ // ignore every of type
-			events.forEach(function(fn){
-				this.ignore(type, fn);
-			}, this);
+			this[uid][type] = []
 		} else { // ignore one
-			events.unset(fn);
+			var index = Array.indexOf(events, fn);
+			events.splice(events, index, 1);
 		}
 
 		return this;
@@ -53,11 +48,22 @@ return new Class({
 		var events = this[uid][type];
 		if (!events) return this;
 
+		var ignored = [];
+		var ignore = this.ignore;
+		this.ignore = function(){
+			ignored.push(arguments);
+		};
+
 		var args = [].slice.call(arguments, 1);
 
 		events.forEach(function(fn, bound){
 			fn.apply(this, args);
 		}, this);
+
+		this.ignore = ignore;
+		for (var i = 0; i < ignored.length; i++){
+			this.ignore.apply(this, ignored[i]);
+		}
 
 		return this;
 	}
