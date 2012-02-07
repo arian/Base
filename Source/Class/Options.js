@@ -5,7 +5,7 @@ description: Options
 ...
 */
 
-define(['../Utility/typeOf', '../Utility/merge', '../Utility/Function', '../Core/Class'], function(typeOf, merge, Function, Class){
+define(['../Utility/typeOf', '../Utility/merge', '../Utility/Function', '../Class'], function(typeOf, merge, Function, Class){
 
 "use strict";
 
