@@ -7,7 +7,7 @@ provides: Store
 ...
 */
 
-define(['../Core/Class', '../Utility/Function'], function(Class, Function){
+define(['../Class', '../Utility/Function'], function(Class, Function){
 
 "use strict";
 
